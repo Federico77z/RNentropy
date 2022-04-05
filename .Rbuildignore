@@ -1,0 +1,9 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+RNentropy.Rproj
+.RData
+.Rhistory
+.gitignore
+LICENSE.txt
+cran-comments.md
+^README\.Rmd$

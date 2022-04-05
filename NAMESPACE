@@ -1,0 +1,4 @@
+exportPattern("^[[:alpha:]]+")
+importFrom("stats", "pchisq")
+importFrom("stats", "p.adjust")
+importFrom("utils", "read.table", "tail")

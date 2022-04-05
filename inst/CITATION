@@ -1,0 +1,15 @@
+year <- 2018
+note <- sprintf("R package version %s", meta$Version)
+
+bibentry(bibtype = "Manual",
+         title = "{RNentropy}: an entropy-based tool for the   detection of significant variation of gene expression across multiple RNA-Seq  experiments",
+         author = c(person("Federico", "Zambelli"),
+                    person("Francesca", "Mastropasqua"),
+                    person("Ernesto", "Picardi"),
+                    person("Anna Maria", "D'erchia"),
+                    person("Graziano", "Pesole"),
+                    person("Giulio", "Pavesi")),
+         year = 2018,
+         url = "https://doi.org/10.1093/nar/gky055",
+         doi = "10.1093/nar/gky055",
+         journal = "Nucleic Acids Research")
