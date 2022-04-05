@@ -12,10 +12,11 @@ of expression across multiple conditions. Given expression estimates
 from any number of RNA-Seq samples and conditions it identifies genes or
 transcripts with a significant variation of expression across all the
 conditions studied, together with the samples in which they are over- or
-under-expressed. Zambelli et al. (2018) <doi:10.1093/nar/gky055>.
+under-expressed. [Zambelli et
+al. (2018)](https://doi.org/10.1093/nar/gky055).
 
 A detailed walk-through on how to use RNentropy is available at
-<doi:10.1007/978-1-0716-1307-8_6>
+[doi:10.1007/978-1-0716-1307-8_6](https://doi.org/10.1007/978-1-0716-1307-8_6)
 
 ## Installation
 
