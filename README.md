@@ -6,17 +6,18 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-This is sn implementation of a method based on information theory
+This is the implementation of a method based on information theory
 devised for the identification of genes showing a significant variation
 of expression across multiple conditions. Given expression estimates
 from any number of RNA-Seq samples and conditions it identifies genes or
 transcripts with a significant variation of expression across all the
 conditions studied, together with the samples in which they are over- or
-under-expressed. [Zambelli et
+under-expressed. [Zambelli F. et
 al. (2018)](https://doi.org/10.1093/nar/gky055).
 
 A detailed walk-through on how to use RNentropy is available at
-[doi:10.1007/978-1-0716-1307-8_6](https://doi.org/10.1007/978-1-0716-1307-8_6)
+[Zambelli F., Pavesi G.
+(2021)](https://doi.org/10.1007/978-1-0716-1307-8_6)
 
 ## Installation
 
@@ -29,7 +30,8 @@ install.packages("RNentropy")
 ## Example
 
 This is a basic example showing how to use RNentropy. Please see
-<doi:10.1007/978-1-0716-1307-8_6> for more info.
+[Zambelli F., Pavesi G.
+(2021)](https://doi.org/10.1007/978-1-0716-1307-8_6) for more info.
 
 ``` r
 library(RNentropy)

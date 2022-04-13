@@ -9,6 +9,7 @@ Authors@R: c(
     comment = c(ORCID = "0000-0003-3487-4331")),
     person("Giulio", "Pavesi", email = "giulio.pavesi@unimi.it", role = "aut",
     comment = c(ORCID = "0000-0001-5705-6249")))
+Maintainer: Federico Zambelli <federico.zambelli@unimi.it>
 Description: An implementation of a method based on information theory devised 
     for the identification of genes showing a significant variation of expression
     across multiple conditions. Given expression estimates from any number of 
