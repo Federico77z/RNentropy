@@ -8,3 +8,6 @@ LICENSE.txt
 cran-comments.md
 ^README\.Rmd$
 ^CRAN-SUBMISSION$
+^\.github$
+^CITATION\.cff$
+^PROVENANCE\.md$

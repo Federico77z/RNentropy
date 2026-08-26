@@ -1,9 +1,9 @@
 Package: RNentropy
 Type: Package
 Title: Entropy Based Method for the Detection of Significant Variation in Gene Expression Data
-Version: 1.2.3
+Version: 1.2.3.9000
 Depends: R (>= 2.10)
-Date: 2022-04-05
+Date: 2026-08-26
 Authors@R: c(
     person("Federico", "Zambelli", email = "federico.zambelli@unimi.it", role = "cre",
     comment = c(ORCID = "0000-0003-3487-4331")),

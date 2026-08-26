@@ -4,6 +4,8 @@
 # RNentropy
 
 <!-- badges: start -->
+
+[![R-CMD-check](https://github.com/Federico77z/RNentropy/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/Federico77z/RNentropy/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 This is the implementation of a method based on information theory
@@ -17,14 +19,24 @@ al. (2018)](https://doi.org/10.1093/nar/gky055).
 
 A detailed walk-through on how to use RNentropy is available at
 [Zambelli F., Pavesi G.
-(2021)](https://doi.org/10.1007/978-1-0716-1307-8_6)
+(2021)](https://doi.org/10.1007/978-1-0716-1307-8_6).
+
+The `main` branch is the development line based on the CRAN 1.2.3
+release. The exact release sources are preserved by the
+[`v1.2.3`](https://github.com/Federico77z/RNentropy/tree/v1.2.3) tag.
 
 ## Installation
 
-You can install the development version of RNentropy like so:
+Install the stable release from CRAN:
 
 ``` r
 install.packages("RNentropy")
+```
+
+Install the development version from GitHub:
+
+``` r
+remotes::install_github("Federico77z/RNentropy")
 ```
 
 ## Example
@@ -45,3 +57,9 @@ Results <- RN_select(Results)
 #Compute the Point Mutual information Matrix
 Results <- RN_pmi(Results)
 ```
+
+## Independent C++ implementation
+
+The independently developed C++ reference implementation, including the
+historical isoform-switch executable, is archived at
+[Federico77z/RNentropy\_cpp](https://github.com/Federico77z/RNentropy_cpp).
