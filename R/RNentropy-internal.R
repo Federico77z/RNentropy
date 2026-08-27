@@ -355,3 +355,59 @@ function(x, lpv_t)
   return(!all(is.na(r)))
 }
 
+.RN_column_index <- function(X, column, argument)
+{
+  if(length(column) != 1 || is.na(column))
+  {
+    stop(paste(argument, "must identify exactly one column"), call. = FALSE)
+  }
+
+  if(is.character(column))
+  {
+    column <- match(column, colnames(X))
+  }
+
+  if(!is.numeric(column) || is.na(column) || column != as.integer(column) ||
+     column < 1 || column > ncol(X))
+  {
+    stop(paste(argument, "does not identify a column in the input table"),
+      call. = FALSE)
+  }
+
+  return(as.integer(column))
+}
+
+.RN_column_indices <- function(X, columns, argument)
+{
+  if(is.character(columns))
+  {
+    indices <- match(columns, colnames(X))
+  }
+  else
+  {
+    indices <- columns
+  }
+
+  if(!is.numeric(indices) || any(is.na(indices)) ||
+     any(indices != as.integer(indices)) ||
+     any(indices < 1 | indices > ncol(X)))
+  {
+    stop(paste(argument, "contains a column not found in the input table"),
+      call. = FALSE)
+  }
+
+  return(unique(as.integer(indices)))
+}
+
+.RN_positive_scalar <- function(value, argument, allow.zero)
+{
+  invalid <- length(value) != 1 || !is.numeric(value) || is.na(value) ||
+    !is.finite(value) || value < 0 || (!allow.zero && value == 0)
+
+  if(invalid)
+  {
+    qualifier <- if(allow.zero) "non-negative" else "positive"
+    stop(paste(argument, "must be a finite", qualifier, "number"),
+      call. = FALSE)
+  }
+}

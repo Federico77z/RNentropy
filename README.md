@@ -58,6 +58,24 @@ Results <- RN_select(Results)
 Results <- RN_pmi(Results)
 ```
 
+## Isoform-switch analysis
+
+Isoform switching can be analyzed from a transcript-level expression table
+containing the gene identifier associated with each transcript. The result
+includes local p-values and explicit information about genes or samples that
+could not be tested.
+
+``` r
+Isoforms <- data.frame(
+  gene = c("gene_1", "gene_1", "gene_2"),
+  sample_1 = c(10, 1, 4),
+  sample_2 = c(1, 10, 5)
+)
+IsoResults <- RN_iso_calc(Isoforms, gene.col = "gene")
+IsoResults$gene_status
+IsoResults$lpv
+```
+
 ## Independent C++ implementation
 
 The independently developed C++ reference implementation, including the

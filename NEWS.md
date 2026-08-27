@@ -3,6 +3,9 @@
 - Initialized the public GitHub development repository from the verified CRAN
   1.2.3 release.
 - Added continuous integration and repository provenance metadata.
+- Added `RN_iso_calc` and `RNentropy_iso_switch` for the analysis of isoform
+  switching, with explicit testability information and results validated against
+  the independent C++ implementation.
 
 # RNentropy 1.2.3
 

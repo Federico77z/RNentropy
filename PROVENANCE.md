@@ -16,3 +16,26 @@ OK under R 4.6.1 on Linux on 26 August 2026.
 The `main` branch begins post-release development at version 1.2.3.9000. The
 independent historical C++ implementation is preserved separately at
 [Federico77z/RNentropy_cpp](https://github.com/Federico77z/RNentropy_cpp).
+
+The isoform-switch implementation added on the `isoswitch` branch was recovered
+from the latest unpublished R development trees and adapted to the current
+package. Its eligibility rules, numerical results, and untestable-sample states
+were validated against `RNentropy_iso_switch` in the archived C++ repository.
+The package includes a compact regression fixture derived from the historical
+S7 example; the complete S7, S12, and S13 examples remain outside the package
+repository because of their size.
+
+The complete comparison was repeated on 27 August 2026 with the default
+`min_expr = 1` and `pseudocount = 0.01`:
+
+| Example | Genes | Tested | NOTEST(ISO) | NOTEST(EXP) | Numeric scores | Maximum absolute difference |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| S7 | 28,426 | 4,058 | 15,306 | 9,062 | 24,133 | 4.982e-5 |
+| S12 | 28,426 | 5,325 | 15,306 | 7,795 | 31,733 | 4.546e-5 |
+| S13 | 28,426 | 4,766 | 15,306 | 8,354 | 28,359 | 4.605e-5 |
+
+All gene classifications and all `-`/`*` marker positions matched. Numerical
+scores were compared with the C++ `main.res` files; the differences shown above
+are consistent with their six-digit output precision. The historical
+`summary.res` files were not used because rows containing `-` or `*` omit those
+fields and shift the remaining values.
