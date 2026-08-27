@@ -22,8 +22,9 @@ from the latest unpublished R development trees and adapted to the current
 package. Its eligibility rules, numerical results, and untestable-sample states
 were validated against `RNentropy_iso_switch` in the archived C++ repository.
 The package includes a compact regression fixture derived from the historical
-S7 example; the complete S7, S12, and S13 examples remain outside the package
-repository because of their size.
+S7 example and the complete S7 input as the compressed
+`RN_IsoSwitch_Example_S7` package dataset. The complete S12 and S13 examples
+remain outside the package repository because of their size.
 
 The complete comparison was repeated on 27 August 2026 with the default
 `min_expr = 1` and `pseudocount = 0.01`:

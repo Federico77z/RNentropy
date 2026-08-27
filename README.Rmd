@@ -58,15 +58,15 @@ Results <- RN_pmi(Results)
 
 ## Isoform-switch analysis
 
-The package includes a compact subset of the historical S7 data used to
-validate the isoform-switch implementation. The analysis can be run directly
-from the expression file with `RNentropy_iso_switch()`:
+The package includes the complete historical S7 data used to validate the
+isoform-switch implementation. It contains expression values for 81,314
+transcripts from 28,426 genes across six tissues. Load the data frame and run
+the analysis with `RN_iso_calc()`:
 
 ```{r isoswitch, eval=FALSE}
-S7_File <- system.file("extdata", "isoswitch_s7.tsv", package = "RNentropy")
-S7_Results <- RNentropy_iso_switch(
-  S7_File,
-  tr.col = "TR_ID",
+data("RN_IsoSwitch_Example_S7")
+S7_Results <- RN_iso_calc(
+  RN_IsoSwitch_Example_S7,
   gene.col = "GENE_ID"
 )
 S7_Results$gene_status
@@ -74,15 +74,9 @@ S7_Results$sample_status
 S7_Results$lpv
 ```
 
-The same calculation can be run on a data frame with `RN_iso_calc()`:
-
-```{r isoswitch-data-frame, eval=FALSE}
-S7_Data <- read.delim(S7_File, check.names = FALSE)
-S7_Calculated <- RN_iso_calc(S7_Data, gene.col = "GENE_ID")
-
-identical(S7_Results$gene_status, S7_Calculated$gene_status)
-all.equal(S7_Results$lpv, S7_Calculated$lpv)
-```
+For transcript expression stored in a text file,
+`RNentropy_iso_switch()` provides the corresponding file-based interface; see
+`?RNentropy_iso_switch` for its input options.
 
 ## Independent C++ implementation
 

@@ -6,6 +6,8 @@
 - Added `RN_iso_calc` and `RNentropy_iso_switch` for the analysis of isoform
   switching, with explicit testability information and results validated against
   the independent C++ implementation.
+- Added the complete historical S7 isoform-switch example as the compressed
+  `RN_IsoSwitch_Example_S7` package dataset.
 
 # RNentropy 1.2.3
 
