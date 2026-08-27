@@ -36,7 +36,7 @@ install.packages("RNentropy")
 Install the development version from GitHub:
 
 ``` r
-remotes::install_github("Federico77z/RNentropy")
+pak::pak("Federico77z/RNentropy")
 ```
 
 ## Example
@@ -58,20 +58,30 @@ Results <- RN_pmi(Results)
 
 ## Isoform-switch analysis
 
-Isoform switching can be analyzed from a transcript-level expression table
-containing the gene identifier associated with each transcript. The result
-includes local p-values and explicit information about genes or samples that
-could not be tested.
+The package includes a compact subset of the historical S7 data used to
+validate the isoform-switch implementation. The analysis can be run directly
+from the expression file with `RNentropy_iso_switch()`:
 
 ```{r isoswitch, eval=FALSE}
-Isoforms <- data.frame(
-  gene = c("gene_1", "gene_1", "gene_2"),
-  sample_1 = c(10, 1, 4),
-  sample_2 = c(1, 10, 5)
+S7_File <- system.file("extdata", "isoswitch_s7.tsv", package = "RNentropy")
+S7_Results <- RNentropy_iso_switch(
+  S7_File,
+  tr.col = "TR_ID",
+  gene.col = "GENE_ID"
 )
-IsoResults <- RN_iso_calc(Isoforms, gene.col = "gene")
-IsoResults$gene_status
-IsoResults$lpv
+S7_Results$gene_status
+S7_Results$sample_status
+S7_Results$lpv
+```
+
+The same calculation can be run on a data frame with `RN_iso_calc()`:
+
+```{r isoswitch-data-frame, eval=FALSE}
+S7_Data <- read.delim(S7_File, check.names = FALSE)
+S7_Calculated <- RN_iso_calc(S7_Data, gene.col = "GENE_ID")
+
+identical(S7_Results$gene_status, S7_Calculated$gene_status)
+all.equal(S7_Results$lpv, S7_Calculated$lpv)
 ```
 
 ## Independent C++ implementation

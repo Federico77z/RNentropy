@@ -1,4 +1,4 @@
-# RNentropy 1.2.3.9000
+# RNentropy 1.3.0
 
 - Initialized the public GitHub development repository from the verified CRAN
   1.2.3 release.
