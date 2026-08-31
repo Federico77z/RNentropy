@@ -40,3 +40,9 @@ scores were compared with the C++ `main.res` files; the differences shown above
 are consistent with their six-digit output precision. The historical
 `summary.res` files were not used because rows containing `-` or `*` omit those
 fields and shift the remaining values.
+
+The synthetic file used for the package's file-based examples was copied
+unchanged from `tests/data/synthetic_expression.tsv` in the archived C++
+repository. It is a regression and documentation fixture rather than a
+biological dataset. Its SHA-256 checksum is
+`daf83d525ac6b43bdaf011d940a524d0c8e2e188d9cff942fa5a4f9732f04594`.

@@ -1,0 +1,20 @@
+# GENE_COL	2
+# TR_COL	1
+# COMMENTS	3
+# EXP	A	4,5
+# EXP	B	6,7
+# EXP	C	8,9
+# END
+tr_uniform	gene_uniform	uniform	10	10	10	10	10	10
+tr_a	gene_a	A_specific	50	45	2	3	2	3
+tr_b	gene_b	B_specific	2	3	50	45	2	3
+tr_c	gene_c	C_specific	2	3	2	3	50	45
+tr_ab	gene_ab	AB_specific	40	38	40	38	1	1
+tr_ac	gene_ac	AC_specific	40	38	1	1	40	38
+tr_bc	gene_bc	BC_specific	1	1	40	38	40	38
+tr_zero	gene_zero	zero	0	0	0	0	0	0
+tr_switch_1	gene_switch	switch_one	30	28	3	2	10	11
+tr_switch_2	gene_switch	switch_two	3	2	30	28	10	11
+tr_single	gene_single	single_isoform	12	11	8	9	5	6
+tr_low_1	gene_low	low_one	1	0.5	0.2	0.1	0.3	0.4
+tr_low_2	gene_low	low_two	0.4	0.3	0.2	0.1	0.5	0.6

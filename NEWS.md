@@ -1,3 +1,8 @@
+# RNentropy 1.3.0.9000
+
+- Added `RN_iso_select` to apply multiple-testing correction to isoform-switch
+  local p-values and retain genes significant in at least one sample.
+
 # RNentropy 1.3.0
 
 - Initialized the public GitHub development repository from the verified CRAN

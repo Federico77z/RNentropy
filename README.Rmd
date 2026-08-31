@@ -23,7 +23,10 @@ This is the implementation of a method based on information theory devised for t
 
 A detailed walk-through on how to use RNentropy is available at [Zambelli F., Pavesi G. (2021)](https://doi.org/10.1007/978-1-0716-1307-8_6).
 
-The `main` branch is the development line based on the CRAN 1.2.3 release. The exact release sources are preserved by the [`v1.2.3`](https://github.com/Federico77z/RNentropy/tree/v1.2.3) tag.
+The `main` branch contains the stable 1.3.0 code, while ongoing changes are
+developed on the `devel` branch. The exact CRAN 1.2.3 release sources are
+preserved by the [`v1.2.3`](https://github.com/Federico77z/RNentropy/tree/v1.2.3)
+tag.
 
 ## Installation
 
@@ -36,7 +39,7 @@ install.packages("RNentropy")
 Install the development version from GitHub:
 
 ``` r
-pak::pak("Federico77z/RNentropy")
+pak::pak("Federico77z/RNentropy@devel")
 ```
 
 ## Example
@@ -56,6 +59,42 @@ Results <- RN_select(Results)
 Results <- RN_pmi(Results)
 ```
 
+### Starting from an expression file
+
+`RNentropy()` reads normalized expression values directly from a text file.
+The package includes a small synthetic example with three conditions and two
+replicates per condition. The first three columns contain transcript IDs, gene
+IDs, and comments; the remaining columns contain expression values.
+
+```{r file-example, eval=FALSE}
+Example_file <- system.file(
+  "extdata", "RNentropy_example.tsv",
+  package = "RNentropy"
+)
+Sample_names <- c("A_1", "A_2", "B_1", "B_2", "C_1", "C_2")
+Example_design <- matrix(
+  c(1, 0, 0,
+    1, 0, 0,
+    0, 1, 0,
+    0, 1, 0,
+    0, 0, 1,
+    0, 0, 1),
+  nrow = 6, byrow = TRUE,
+  dimnames = list(Sample_names, c("A", "B", "C"))
+)
+
+File_Results <- RNentropy(
+  Example_file,
+  tr.col = 1,
+  design = Example_design,
+  header = FALSE,
+  skip.col = c(2, 3),
+  col.names = Sample_names
+)
+File_Results <- RN_select(File_Results)
+File_Results$selected
+```
+
 ## Isoform-switch analysis
 
 The package includes the complete historical S7 data used to validate the
@@ -69,14 +108,61 @@ S7_Results <- RN_iso_calc(
   RN_IsoSwitch_Example_S7,
   gene.col = "GENE_ID"
 )
+S7_Results <- RN_iso_select(S7_Results)
 S7_Results$gene_status
 S7_Results$sample_status
 S7_Results$lpv
+S7_Results$lpv_adj
+S7_Results$selected
 ```
 
-For transcript expression stored in a text file,
-`RNentropy_iso_switch()` provides the corresponding file-based interface; see
-`?RNentropy_iso_switch` for its input options.
+`RN_iso_select()` applies multiple-testing correction jointly to all finite
+sample p-values from genes with status `TESTED`, and retains genes significant
+in at least one sample. Its `lpv_t` argument is expressed as a raw p-value and
+defaults to 0.01; the correction method defaults to Benjamini-Hochberg (`BH`).
+This selection step is specific to the R package and has no counterpart in the
+historical C++ isoform-switch executable.
+
+### Starting from a transcript expression file
+
+The same synthetic file can be analyzed for changes in relative isoform usage.
+Here the gene-ID column is retained, while the comments column is skipped.
+
+```{r isoswitch-file-example, eval=FALSE}
+Example_file <- system.file(
+  "extdata", "RNentropy_example.tsv",
+  package = "RNentropy"
+)
+Sample_names <- c("A_1", "A_2", "B_1", "B_2", "C_1", "C_2")
+Example_design <- matrix(
+  c(1, 0, 0,
+    1, 0, 0,
+    0, 1, 0,
+    0, 1, 0,
+    0, 0, 1,
+    0, 0, 1),
+  nrow = 6, byrow = TRUE,
+  dimnames = list(Sample_names, c("A", "B", "C"))
+)
+
+Iso_File_Results <- RNentropy_iso_switch(
+  Example_file,
+  tr.col = 1,
+  gene.col = 2,
+  design = Example_design,
+  header = FALSE,
+  skip.col = 3,
+  col.names = c("GENE_ID", Sample_names)
+)
+Iso_File_Results <- RN_iso_select(Iso_File_Results)
+Iso_File_Results$gene_status
+Iso_File_Results$selected
+```
+
+This compact dataset is synthetic and intended to demonstrate input handling
+and expected analysis behavior. The complete S7 dataset above provides the
+historical biological example. See `?RNentropy_iso_switch` for all file-input
+options.
 
 ## Independent C++ implementation
 
