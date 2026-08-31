@@ -1,4 +1,4 @@
-# RNentropy 1.3.0.9000
+# RNentropy 1.3.1
 
 - Added `RN_iso_select` to apply multiple-testing correction to isoform-switch
   local p-values and retain genes significant in at least one sample.
