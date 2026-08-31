@@ -87,6 +87,18 @@ test_that("non-testable values are excluded and empty selections are valid", {
     colnames(input$lpv), colnames(results$lpv_adj)))
 })
 
+test_that("empty RN_iso_calc results can be selected", {
+  input <- RN_iso_calc(data.frame(gene = character(), sample = numeric()),
+    gene.col = "gene")
+
+  results <- RN_iso_select(input)
+
+  expect_identical(dim(results$lpv_adj), c(0L, 1L))
+  expect_identical(nrow(results$selected), 0L)
+  expect_identical(names(results$selected),
+    c("gene_status", "ISO_LPV_sample", "CORR_ISO_LPV_sample"))
+})
+
 test_that("ties in corrected signal retain input order", {
   input <- iso_select_fixture()
   input$lpv["gene_1", ] <- c(4, 1)
@@ -135,6 +147,8 @@ test_that("complete S7 selection agrees with a direct adjusted-p calculation", {
     function(x) any(x <= 0.01, na.rm = TRUE))]
 
   expect_gt(length(expected), 0L)
+  expect_identical(nrow(results$selected), 33L)
+  expect_identical(sum(results$lpv_adj >= 2, na.rm = TRUE), 34L)
   expect_setequal(rownames(results$selected), expected)
   expect_true(all(results$selected$gene_status == "TESTED"))
   expect_true(all(apply(results$lpv_adj[expected, , drop = FALSE], 1,

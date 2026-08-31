@@ -2,6 +2,8 @@
 
 - Added `RN_iso_select` to apply multiple-testing correction to isoform-switch
   local p-values and retain genes significant in at least one sample.
+- Added runnable file-based examples for the standard and isoform-switch
+  workflows using a shared synthetic regression dataset.
 
 # RNentropy 1.3.0
 

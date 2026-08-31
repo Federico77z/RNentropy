@@ -108,6 +108,41 @@ test_that("file wrapper resolves skipped and renamed columns", {
   expect_identical(unname(results$gene_status), "TESTED")
 })
 
+test_that("isoform rows do not need to be consecutive", {
+  interleaved <- data.frame(
+    transcript = c("a_1", "b_1", "a_2", "b_2"),
+    gene = c("a", "b", "a", "b"),
+    sample_1 = c(10, 8, 2, 3),
+    sample_2 = c(2, 3, 10, 8)
+  )
+  grouped <- interleaved[c(1, 3, 2, 4), ]
+
+  direct.interleaved <- RN_iso_calc(interleaved, gene.col = "gene")
+  direct.grouped <- RN_iso_calc(grouped, gene.col = "gene")
+
+  expect_identical(direct.interleaved$gene_status,
+    direct.grouped$gene_status)
+  expect_identical(direct.interleaved$sample_status,
+    direct.grouped$sample_status)
+  expect_equal(direct.interleaved$lpv, direct.grouped$lpv)
+
+  paths <- tempfile(fileext = c(".interleaved.tsv", ".grouped.tsv"))
+  on.exit(unlink(paths))
+  write.table(interleaved, paths[1], sep = "\t", quote = FALSE,
+    row.names = FALSE)
+  write.table(grouped, paths[2], sep = "\t", quote = FALSE,
+    row.names = FALSE)
+
+  file.interleaved <- RNentropy_iso_switch(paths[1], tr.col = "transcript",
+    gene.col = "gene")
+  file.grouped <- RNentropy_iso_switch(paths[2], tr.col = "transcript",
+    gene.col = "gene")
+
+  expect_identical(file.interleaved$gene_status, file.grouped$gene_status)
+  expect_identical(file.interleaved$sample_status, file.grouped$sample_status)
+  expect_equal(file.interleaved$lpv, file.grouped$lpv)
+})
+
 test_that("invalid iso-switch inputs are rejected", {
   valid <- data.frame(gene = c("gene", "gene"),
     sample_1 = c(2, 0), sample_2 = c(0, 2))

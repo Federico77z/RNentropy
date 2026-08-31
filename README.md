@@ -21,9 +21,8 @@ A detailed walk-through on how to use RNentropy is available at
 [Zambelli F., Pavesi G.
 (2021)](https://doi.org/10.1007/978-1-0716-1307-8_6).
 
-The `main` branch contains the stable 1.3.0 code, while ongoing changes
-are developed on the `devel` branch. The exact CRAN 1.2.3 release
-sources are preserved by the
+The `main` branch contains the current development version. The exact
+CRAN 1.2.3 release sources are preserved by the
 [`v1.2.3`](https://github.com/Federico77z/RNentropy/tree/v1.2.3) tag.
 
 ## Installation
@@ -37,7 +36,7 @@ install.packages("RNentropy")
 Install the development version from GitHub:
 
 ``` r
-pak::pak("Federico77z/RNentropy@devel")
+pak::pak("Federico77z/RNentropy")
 ```
 
 ## Example

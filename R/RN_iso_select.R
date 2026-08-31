@@ -11,7 +11,8 @@ function(Results, lpv_t = 0.01, method = "BH")
 	{
 		stop("Results$lpv must be a numeric matrix", call. = FALSE)
 	}
-	if(is.null(rownames(Results$lpv)) || is.null(colnames(Results$lpv)))
+	if(is.null(colnames(Results$lpv)) ||
+		(nrow(Results$lpv) > 0 && is.null(rownames(Results$lpv))))
 	{
 		stop("Results$lpv must have row and column names", call. = FALSE)
 	}
@@ -21,7 +22,7 @@ function(Results, lpv_t = 0.01, method = "BH")
 		stop("Results$gene_status must have one value for each row of Results$lpv",
 			call. = FALSE)
 	}
-	if(!is.null(names(Results$gene_status)) &&
+	if(nrow(Results$lpv) > 0 && !is.null(names(Results$gene_status)) &&
 		!identical(names(Results$gene_status), rownames(Results$lpv)))
 	{
 		stop("names of Results$gene_status must match row names of Results$lpv",
