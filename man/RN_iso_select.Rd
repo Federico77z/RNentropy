@@ -36,7 +36,7 @@ that relative isoform usage does not change in any sample, and it is valid
 under independence and under the positive dependence expected between samples
 of the same gene.
 
-Correction is then applied as one family across all gene-level p-values
+Correction is then applied as one family across all gene-level p-values.
 Genes that were not tested, and TESTED genes
 without any finite sample p-value, are excluded from the correction family.
 Sample p-values are not corrected: the original isoform-switch LPVs are
