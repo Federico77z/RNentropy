@@ -36,17 +36,13 @@ that relative isoform usage does not change in any sample, and it is valid
 under independence and under the positive dependence expected between samples
 of the same gene.
 
-Correction is then applied as one family across all gene-level p-values, so
-that the selection controls the error rate over genes rather than over
-individual gene-sample tests. Genes that were not tested, and TESTED genes
+Correction is then applied as one family across all gene-level p-values
+Genes that were not tested, and TESTED genes
 without any finite sample p-value, are excluded from the correction family.
 Sample p-values are not corrected: the original isoform-switch LPVs are
 reported next to the adjusted gene-level value to show in which samples the
 change occurs.
 
-This selection step is specific to the R package. The historical C++
-isoform-switch implementation produces unfiltered results and has no
-corresponding selector.
 }
 
 \value{
