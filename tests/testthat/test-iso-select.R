@@ -26,22 +26,48 @@ iso_select_fixture <- function()
   )
 }
 
-test_that("iso-switch correction uses all eligible gene-sample tests", {
+simes_reference <- function(lpv, gene_status)
+{
+  pvalues <- rep(NA_real_, nrow(lpv))
+  names(pvalues) <- rownames(lpv)
+  for(gene in which(gene_status == "TESTED"))
+  {
+    p <- sort(10 ^ -lpv[gene, is.finite(lpv[gene, ])])
+    if(length(p) > 0)
+    {
+      pvalues[gene] <- min(length(p) * p / seq_along(p))
+    }
+  }
+  pvalues
+}
+
+test_that("Simes combination matches hand-computed values", {
+  expect_equal(RNentropy:::.RN_simes(0.03), 0.03)
+  expect_equal(RNentropy:::.RN_simes(c(0.1, 0.001)), 0.002)
+  expect_equal(RNentropy:::.RN_simes(c(0.01, 0.01)), 0.01)
+  expect_equal(RNentropy:::.RN_simes(c(0.04, 0.02, 0.03)), 0.04)
+  expect_equal(RNentropy:::.RN_simes(c(1, 1, 1)), 1)
+})
+
+test_that("gene-level p-values are corrected across TESTED genes", {
   input <- iso_select_fixture()
   results <- RN_iso_select(input)
 
-  eligible <- matrix(input$gene_status == "TESTED", nrow = nrow(input$lpv),
-    ncol = ncol(input$lpv)) & is.finite(input$lpv)
-  expected <- matrix(NA_real_, nrow = nrow(input$lpv), ncol = ncol(input$lpv),
-    dimnames = dimnames(input$lpv))
-  expected[eligible] <- -log10(p.adjust(10 ^ -input$lpv[eligible], method = "BH"))
-  colnames(expected) <- c("CORR_ISO_LPV_sample_1",
-    "CORR_ISO_LPV_sample_2")
+  expect_equal(results$gpv, -log10(c(gene_1 = 0.002, gene_2 = 0.01,
+    gene_3 = NA, gene_4 = 1e-4)))
+  expected <- rep(NA_real_, 4)
+  names(expected) <- rownames(input$lpv)
+  expected[-3] <- -log10(p.adjust(c(0.002, 0.01, 1e-4), method = "BH"))
+  expect_equal(results$gpv_adj, expected)
+  expect_null(results$lpv_adj)
 
-  expect_equal(results$lpv_adj, expected)
-  expect_identical(rownames(results$selected), c("gene_4", "gene_1"))
-  expect_identical(names(results$selected), c("gene_status",
-    colnames(input$lpv), colnames(expected)))
+  expect_identical(rownames(results$selected), c("gene_4", "gene_1", "gene_2"))
+  expect_identical(names(results$selected), c("gene_status", "ISO_GPV",
+    "CORR_ISO_GPV", colnames(input$lpv)))
+  expect_equal(unname(results$selected$CORR_ISO_GPV),
+    unname(expected[c("gene_4", "gene_1", "gene_2")]))
+  expect_equal(as.matrix(results$selected[colnames(input$lpv)]),
+    input$lpv[c("gene_4", "gene_1", "gene_2"), ])
   expect_identical(results$expr, input$expr)
   expect_identical(results$design, input$design)
   expect_identical(results$lpv, input$lpv)
@@ -52,39 +78,50 @@ test_that("iso-switch correction uses all eligible gene-sample tests", {
 
 test_that("threshold is inclusive and correction method is configurable", {
   input <- iso_select_fixture()
+  simes <- simes_reference(input$lpv, input$gene_status)
+  family <- !is.na(simes)
 
   for(method in p.adjust.methods)
   {
     results <- RN_iso_select(input, method = method)
-    eligible <- is.finite(input$lpv) &
-      matrix(input$gene_status == "TESTED", nrow = nrow(input$lpv),
-        ncol = ncol(input$lpv))
-    expect_equal(results$lpv_adj[eligible],
-      -log10(p.adjust(10 ^ -input$lpv[eligible], method = method)),
-      info = method)
+    expect_equal(unname(results$gpv_adj[family]),
+      unname(-log10(p.adjust(simes[family], method = method))), info = method)
+    expect_true(is.na(results$gpv_adj["gene_3"]), info = method)
   }
 
-  uncorrected <- RN_iso_select(input, lpv_t = 0.01, method = "none")
-  expect_identical(rownames(uncorrected$selected),
-    c("gene_4", "gene_1", "gene_2"))
+  uncorrected <- RN_iso_select(input, gpv_t = 1e-4, method = "none")
+  expect_identical(rownames(uncorrected$selected), "gene_4")
 
-  bonferroni <- RN_iso_select(input, lpv_t = 0.0005, method = "bonferroni")
-  expect_identical(rownames(bonferroni$selected), "gene_4")
-  expect_equal(bonferroni$lpv_adj["gene_4", 2], -log10(0.0005))
+  bonferroni <- RN_iso_select(input, gpv_t = 0.006, method = "bonferroni")
+  expect_identical(rownames(bonferroni$selected), c("gene_4", "gene_1"))
+  expect_equal(unname(bonferroni$gpv_adj["gene_1"]), -log10(0.006))
 })
 
 test_that("non-testable values are excluded and empty selections are valid", {
   input <- iso_select_fixture()
   input$lpv["gene_1", 1] <- Inf
 
-  results <- RN_iso_select(input, lpv_t = 1e-10)
+  results <- RN_iso_select(input, gpv_t = 1e-10)
 
-  expect_true(is.na(results$lpv_adj["gene_1", 1]))
-  expect_true(all(is.na(results$lpv_adj["gene_3", ])))
+  expect_equal(unname(results$gpv["gene_1"]), 1)
+  expect_true(is.na(results$gpv["gene_3"]))
   expect_s3_class(results$selected, "data.frame")
   expect_identical(nrow(results$selected), 0L)
-  expect_identical(names(results$selected), c("gene_status",
-    colnames(input$lpv), colnames(results$lpv_adj)))
+  expect_identical(names(results$selected), c("gene_status", "ISO_GPV",
+    "CORR_ISO_GPV", colnames(input$lpv)))
+})
+
+test_that("TESTED genes without finite sample p-values are excluded", {
+  input <- iso_select_fixture()
+  input$lpv["gene_1", ] <- NA
+
+  results <- RN_iso_select(input, method = "bonferroni")
+
+  expect_true(is.na(results$gpv["gene_1"]))
+  expect_true(is.na(results$gpv_adj["gene_1"]))
+  expect_equal(unname(results$gpv_adj[c("gene_2", "gene_4")]),
+    -log10(c(0.02, 2e-4)))
+  expect_false("gene_1" %in% rownames(results$selected))
 })
 
 test_that("empty RN_iso_calc results can be selected", {
@@ -93,30 +130,36 @@ test_that("empty RN_iso_calc results can be selected", {
 
   results <- RN_iso_select(input)
 
-  expect_identical(dim(results$lpv_adj), c(0L, 1L))
+  expect_length(results$gpv, 0L)
+  expect_length(results$gpv_adj, 0L)
   expect_identical(nrow(results$selected), 0L)
   expect_identical(names(results$selected),
-    c("gene_status", "ISO_LPV_sample", "CORR_ISO_LPV_sample"))
+    c("gene_status", "ISO_GPV", "CORR_ISO_GPV", "ISO_LPV_sample"))
 })
 
-test_that("ties in corrected signal retain input order", {
+test_that("ties in corrected signal are broken by raw signal, then input order", {
   input <- iso_select_fixture()
-  input$lpv["gene_1", ] <- c(4, 1)
-  input$lpv["gene_4", ] <- c(NA, 4)
+  input$gene_status["gene_3"] <- "TESTED"
+  input$lpv["gene_1", ] <- c(-log10(0.006), NA)
+  input$lpv["gene_2", ] <- c(NA, -log10(0.004))
+  input$lpv["gene_3", ] <- c(NA, -log10(0.5))
+  input$lpv["gene_4", ] <- c(-log10(0.004), NA)
 
-  results <- RN_iso_select(input, lpv_t = 1, method = "none")
+  results <- RN_iso_select(input, gpv_t = 0.1)
 
+  expect_equal(unname(results$gpv_adj[c("gene_1", "gene_2", "gene_4")]),
+    rep(-log10(0.008), 3))
   expect_identical(rownames(results$selected),
-    c("gene_1", "gene_4", "gene_2"))
+    c("gene_2", "gene_4", "gene_1"))
 })
 
 test_that("invalid selector inputs are rejected", {
   input <- iso_select_fixture()
 
   expect_error(RN_iso_select(NULL), "output of RN_iso_calc")
-  expect_error(RN_iso_select(input, lpv_t = 0), "greater than 0")
-  expect_error(RN_iso_select(input, lpv_t = 1.1), "less than or equal")
-  expect_error(RN_iso_select(input, lpv_t = NA_real_), "single p-value")
+  expect_error(RN_iso_select(input, gpv_t = 0), "greater than 0")
+  expect_error(RN_iso_select(input, gpv_t = 1.1), "less than or equal")
+  expect_error(RN_iso_select(input, gpv_t = NA_real_), "single p-value")
   expect_error(RN_iso_select(input, method = "unknown"),
     "p.adjust.methods")
 
@@ -133,24 +176,20 @@ test_that("invalid selector inputs are rejected", {
   expect_error(RN_iso_select(invalid), "non-negative")
 })
 
-test_that("complete S7 selection agrees with a direct adjusted-p calculation", {
+test_that("complete S7 selection agrees with a direct Simes calculation", {
   data("RN_IsoSwitch_Example_S7", package = "RNentropy")
   input <- RN_iso_calc(RN_IsoSwitch_Example_S7, gene.col = "GENE_ID")
   results <- RN_iso_select(input)
 
-  eligible <- matrix(input$gene_status == "TESTED", nrow = nrow(input$lpv),
-    ncol = ncol(input$lpv)) & is.finite(input$lpv)
-  adjusted <- matrix(NA_real_, nrow = nrow(input$lpv), ncol = ncol(input$lpv),
-    dimnames = dimnames(input$lpv))
-  adjusted[eligible] <- p.adjust(10 ^ -input$lpv[eligible], method = "BH")
-  expected <- rownames(input$lpv)[apply(adjusted, 1,
-    function(x) any(x <= 0.01, na.rm = TRUE))]
+  simes <- simes_reference(input$lpv, input$gene_status)
+  family <- !is.na(simes)
+  adjusted <- p.adjust(simes[family], method = "BH")
+  expected <- names(adjusted)[adjusted <= 0.01]
 
-  expect_gt(length(expected), 0L)
-  expect_identical(nrow(results$selected), 33L)
-  expect_identical(sum(results$lpv_adj >= 2, na.rm = TRUE), 34L)
+  expect_identical(sum(family), 4058L)
+  expect_equal(results$gpv_adj[family], -log10(adjusted))
+  expect_identical(nrow(results$selected), 34L)
   expect_setequal(rownames(results$selected), expected)
   expect_true(all(results$selected$gene_status == "TESTED"))
-  expect_true(all(apply(results$lpv_adj[expected, , drop = FALSE], 1,
-    function(x) any(x >= 2, na.rm = TRUE))))
+  expect_false(is.unsorted(rev(results$selected$CORR_ISO_GPV)))
 })

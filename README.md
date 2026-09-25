@@ -112,17 +112,21 @@ S7_Results <- RN_iso_select(S7_Results)
 S7_Results$gene_status
 S7_Results$sample_status
 S7_Results$lpv
-S7_Results$lpv_adj
+S7_Results$gpv_adj
 S7_Results$selected
 ```
 
-`RN_iso_select()` applies multiple-testing correction jointly to all
-finite sample p-values from genes with status `TESTED`, and retains
-genes significant in at least one sample. Its `lpv_t` argument is
-expressed as a raw p-value and defaults to 0.01; the correction method
-defaults to Benjamini-Hochberg (`BH`). This selection step is specific
-to the R package and has no counterpart in the historical C++
-isoform-switch executable.
+`RN_iso_select()` combines the finite sample p-values of each gene with
+status `TESTED` into one gene-level p-value with the Simes method,
+applies multiple-testing correction across genes, and retains genes
+whose adjusted gene-level p-value is at or below the threshold. Its
+`gpv_t` argument is expressed as a raw p-value and defaults to 0.01; the
+correction method defaults to Benjamini-Hochberg (`BH`). The selected
+table reports the gene-level p-value (`ISO_GPV`), its adjusted value
+(`CORR_ISO_GPV`), and the uncorrected per-sample isoform-switch scores
+(`ISO_LPV_<sample>`), which show in which samples the change occurs.
+This selection step is specific to the R package and has no counterpart
+in the historical C++ isoform-switch executable.
 
 ### Starting from a transcript expression file
 

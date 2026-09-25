@@ -1,5 +1,5 @@
 RN_iso_select <-
-function(Results, lpv_t = 0.01, method = "BH")
+function(Results, gpv_t = 0.01, method = "BH")
 {
 	if(!is.list(Results) || !all(c("lpv", "gene_status") %in% names(Results)))
 	{
@@ -33,10 +33,10 @@ function(Results, lpv_t = 0.01, method = "BH")
 		stop("Results$gene_status cannot contain missing values", call. = FALSE)
 	}
 
-	if(length(lpv_t) != 1 || !is.numeric(lpv_t) || is.na(lpv_t) ||
-		!is.finite(lpv_t) || lpv_t <= 0 || lpv_t > 1)
+	if(length(gpv_t) != 1 || !is.numeric(gpv_t) || is.na(gpv_t) ||
+		!is.finite(gpv_t) || gpv_t <= 0 || gpv_t > 1)
 	{
-		stop("lpv_t must be a single p-value greater than 0 and less than or equal to 1",
+		stop("gpv_t must be a single p-value greater than 0 and less than or equal to 1",
 			call. = FALSE)
 	}
 	if(length(method) != 1 || !is.character(method) || is.na(method) ||
@@ -53,35 +53,36 @@ function(Results, lpv_t = 0.01, method = "BH")
 		stop("finite LPVs for TESTED genes must be non-negative", call. = FALSE)
 	}
 
-	Results$lpv_adj <- matrix(NA_real_, nrow = nrow(Results$lpv),
-		ncol = ncol(Results$lpv), dimnames = dimnames(Results$lpv))
-	colnames(Results$lpv_adj) <- paste("CORR_ISO_LPV",
-		sub("^ISO_LPV_", "", colnames(Results$lpv)), sep = "_")
-
-	if(any(eligible))
+	gene.names <- rownames(Results$lpv)
+	gene.pvalues <- rep(NA_real_, nrow(Results$lpv))
+	for(gene in which(rowSums(eligible) > 0))
 	{
-		pvalues <- 10 ^ -Results$lpv[eligible]
-		Results$lpv_adj[eligible] <- -log10(p.adjust(pvalues, method = method))
+		gene.pvalues[gene] <- .RN_simes(10 ^ -Results$lpv[gene, eligible[gene, ]])
 	}
+	family <- !is.na(gene.pvalues)
 
-	selected.rows <- tested & apply(Results$lpv_adj, 1,
-		function(x) any(x >= -log10(lpv_t), na.rm = TRUE))
-	selected.names <- rownames(Results$lpv)[selected.rows]
+	Results$gpv <- -log10(gene.pvalues)
+	Results$gpv_adj <- rep(NA_real_, length(gene.pvalues))
+	if(any(family))
+	{
+		Results$gpv_adj[family] <- -log10(p.adjust(gene.pvalues[family],
+			method = method))
+	}
+	names(Results$gpv) <- gene.names
+	names(Results$gpv_adj) <- gene.names
+
+	selected.rows <- family & Results$gpv_adj >= -log10(gpv_t)
 
 	Results$selected <- data.frame(
 		gene_status = unname(Results$gene_status[selected.rows]),
+		ISO_GPV = unname(Results$gpv[selected.rows]),
+		CORR_ISO_GPV = unname(Results$gpv_adj[selected.rows]),
 		Results$lpv[selected.rows, , drop = FALSE],
-		Results$lpv_adj[selected.rows, , drop = FALSE],
-		row.names = selected.names, check.names = FALSE,
+		row.names = gene.names[selected.rows], check.names = FALSE,
 		stringsAsFactors = FALSE)
 
-	if(any(selected.rows))
-	{
-		strongest <- apply(Results$lpv_adj[selected.rows, , drop = FALSE], 1,
-			max, na.rm = TRUE)
-		Results$selected <- Results$selected[order(-strongest,
-			seq_along(strongest)), , drop = FALSE]
-	}
+	Results$selected <- Results$selected[order(-Results$selected$CORR_ISO_GPV,
+		-Results$selected$ISO_GPV, seq_len(nrow(Results$selected))), , drop = FALSE]
 
 	return(Results)
 }
