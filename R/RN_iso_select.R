@@ -1,5 +1,5 @@
 RN_iso_select <-
-function(Results, gpv_t = 0.01, method = "BH")
+function(Results, gpv_t = 0.01)
 {
 	if(!is.list(Results) || !all(c("lpv", "gene_status") %in% names(Results)))
 	{
@@ -39,11 +39,6 @@ function(Results, gpv_t = 0.01, method = "BH")
 		stop("gpv_t must be a single p-value greater than 0 and less than or equal to 1",
 			call. = FALSE)
 	}
-	if(length(method) != 1 || !is.character(method) || is.na(method) ||
-		!method %in% stats::p.adjust.methods)
-	{
-		stop("method must be one of p.adjust.methods", call. = FALSE)
-	}
 
 	tested <- Results$gene_status == "TESTED"
 	eligible <- matrix(tested, nrow = nrow(Results$lpv),
@@ -59,30 +54,22 @@ function(Results, gpv_t = 0.01, method = "BH")
 	{
 		gene.pvalues[gene] <- .RN_simes(10 ^ -Results$lpv[gene, eligible[gene, ]])
 	}
-	family <- !is.na(gene.pvalues)
+	testable <- !is.na(gene.pvalues)
 
 	Results$gpv <- -log10(gene.pvalues)
-	Results$gpv_adj <- rep(NA_real_, length(gene.pvalues))
-	if(any(family))
-	{
-		Results$gpv_adj[family] <- -log10(p.adjust(gene.pvalues[family],
-			method = method))
-	}
 	names(Results$gpv) <- gene.names
-	names(Results$gpv_adj) <- gene.names
 
-	selected.rows <- family & Results$gpv_adj >= -log10(gpv_t)
+	selected.rows <- testable & Results$gpv >= -log10(gpv_t)
 
 	Results$selected <- data.frame(
 		gene_status = unname(Results$gene_status[selected.rows]),
 		ISO_GPV = unname(Results$gpv[selected.rows]),
-		CORR_ISO_GPV = unname(Results$gpv_adj[selected.rows]),
 		Results$lpv[selected.rows, , drop = FALSE],
 		row.names = gene.names[selected.rows], check.names = FALSE,
 		stringsAsFactors = FALSE)
 
-	Results$selected <- Results$selected[order(-Results$selected$CORR_ISO_GPV,
-		-Results$selected$ISO_GPV, seq_len(nrow(Results$selected))), , drop = FALSE]
+	Results$selected <- Results$selected[order(-Results$selected$ISO_GPV,
+		seq_len(nrow(Results$selected))), , drop = FALSE]
 
 	return(Results)
 }
