@@ -1,51 +1,58 @@
 \name{RN_iso_select}
 \alias{RN_iso_select}
 \title{
-Select genes with significant changes in relative isoform usage.
+Select genes with significant changes in relative isoform usage
 }
 \description{
-Select genes with an adjusted isoform-switch p-value lower than or equal to a
-user-defined threshold in at least one sample.
+Combine the isoform-switch p-values of each gene into one gene-level p-value
+and select genes with a gene-level p-value lower than or equal to a
+user-defined threshold.
 }
 \usage{
-RN_iso_select(Results, lpv_t = 0.01, method = "BH")
+RN_iso_select(Results, gene_pv = 0.01)
 }
 \arguments{
   \item{Results}{
 The output of \code{RN_iso_calc} or \code{RNentropy_iso_switch}.
 }
-  \item{lpv_t}{
-Threshold for adjusted local p-values, expressed as a raw p-value between 0 and
-1 (Default: 0.01).
-}
-  \item{method}{
-Multiple-testing correction method. Available methods are those accepted by
-\code{p.adjust}; type \code{p.adjust.methods} to see the list. The default is
-\code{"BH"} (Benjamini-Hochberg).
+  \item{gene_pv}{
+Threshold for gene-level p-values, expressed as a raw p-value between 0 and 1
+(Default: 0.01).
 }
 }
 
 \details{
-Correction is applied as one family across all finite sample p-values belonging
-to genes with \code{gene_status} equal to \code{"TESTED"}. Genes that were not
-tested and sample p-values that could not be calculated are excluded from the
-correction family.
+For each gene with \code{gene_status} equal to \code{"TESTED"}, the finite
+sample p-values \eqn{p_{(1)} \le \dots \le p_{(k)}}{p(1) <= ... <= p(k)} are
+combined with the Simes method into the gene-level p-value
+\eqn{\min_i k p_{(i)} / i}{min(k * p(i) / i)}. It tests the null hypothesis
+that relative isoform usage does not change in any sample, accounting for the
+multiple sample tests of the gene, and it is valid under independence and under
+the positive dependence expected between samples of the same gene.
 
-This selection step is specific to the R package. The historical C++
-isoform-switch implementation produces unfiltered results and has no
-corresponding selector.
+Gene-level p-values are compared directly with \code{gene_pv}; no correction is
+applied across genes. Genes that were not tested, and TESTED genes without any
+finite sample p-value, receive no gene-level p-value and are never selected.
+Sample p-values are not corrected: the original isoform-switch p-values are
+reported next to the gene-level value to show in which samples the change
+occurs.
 }
 
 \value{
 The original input list containing two additional components:
-\item{lpv_adj}{A gene by sample matrix containing adjusted p-values as
-\code{-log10(adjusted p-value)}. Ineligible values are reported as \code{NA}.}
-\item{selected}{A data.frame containing TESTED genes with an adjusted p-value
-less than or equal to \code{lpv_t} in at least one sample. Gene identifiers are
-stored as row names. The data.frame contains gene status, original
-isoform-switch LPVs, and corrected LPVs named
-\code{CORR_ISO_LPV_<sample>}. Rows are ordered by the strongest corrected
-signal.}
+\item{gene_pv}{A named vector containing, for each gene, the Simes gene-level
+p-value as \code{-log10(p-value)}. Genes without a gene-level p-value are
+reported as \code{NA}.}
+\item{selected}{A data.frame containing TESTED genes with a gene-level p-value
+less than or equal to \code{gene_pv}. Gene identifiers are stored as row names.
+The data.frame contains gene status, the gene-level p-value (\code{ISO_GENE_PV}),
+and the original isoform-switch p-values (\code{ISO_PV_<sample>}), all as
+\code{-log10(p-value)}. Rows are ordered by decreasing \code{ISO_GENE_PV}.}
+}
+
+\references{
+Simes R. J. (1986) An improved Bonferroni procedure for multiple tests of
+significance. \emph{Biometrika}, 73(3), 751--754.
 }
 
 \author{
@@ -62,6 +69,7 @@ Isoforms <- data.frame(
 )
 Results <- RN_iso_calc(Isoforms, gene.col = "gene")
 Results <- RN_iso_select(Results)
+Results$gene_pv
 Results$selected
 }
 \keyword{ RNentropy }

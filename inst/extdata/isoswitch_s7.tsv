@@ -1,4 +1,4 @@
-TR_ID	GENE_ID	brain_s7_1	heart_s7_1	kidney_s7_1	liver_s7_1	lung_s7_1	muscle_s7_1
+TR_ID	GENE_ID	brain	heart	kidney	liver	lung	muscle
 NM_130786.4	A1BG	0.23	0.36	0.15	6.99	0.26	0.08
 NM_001198818.2	A1CF	0.00	0.00	0.26	1.05	0.00	0.00
 NM_001198819.2	A1CF	0.00	0.00	0.00	0.80	0.00	0.00

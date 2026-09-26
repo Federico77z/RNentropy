@@ -411,3 +411,9 @@ function(x, lpv_t)
       call. = FALSE)
   }
 }
+
+.RN_simes <- function(p)
+{
+  k <- length(p)
+  return(min(k * sort(p) / seq_len(k)))
+}

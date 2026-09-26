@@ -42,13 +42,13 @@ function(X, gene.col, design = NULL, min_expr = 1, pseudocount = 0.01)
 	replicates <- .RN_get_replicate_list(design)
 
 	gene.names <- sort(unique(genes))
-	sample.names <- paste("ISO_LPV", colnames(expression), sep = "_")
+	sample.names <- paste("ISO_PV", colnames(expression), sep = "_")
 	if(is.null(colnames(expression)))
 	{
-		sample.names <- paste("ISO_LPV", seq_len(ncol(expression)), sep = "_")
+		sample.names <- paste("ISO_PV", seq_len(ncol(expression)), sep = "_")
 	}
 
-	lpv <- matrix(NA_real_, nrow = length(gene.names), ncol = ncol(expression),
+	pv <- matrix(NA_real_, nrow = length(gene.names), ncol = ncol(expression),
 		dimnames = list(gene.names, sample.names))
 	sample.status <- matrix(NA_character_, nrow = length(gene.names),
 		ncol = ncol(expression), dimnames = list(gene.names, sample.names))
@@ -99,14 +99,14 @@ function(X, gene.col, design = NULL, min_expr = 1, pseudocount = 0.01)
 
 			statistic <- 2 * sum(current * log(current.frequency / reference.frequency))
 			pvalue <- pchisq(statistic, nrow(isoforms) - 1, lower.tail = FALSE)
-			lpv[gene, sample] <- if(pvalue > 0) min(-log10(pvalue), 300) else 300
+			pv[gene, sample] <- if(pvalue > 0) min(-log10(pvalue), 300) else 300
 			sample.status[gene, sample] <- "TESTED"
 		}
 	}
 
-	res <- data.frame(gene_status = unname(gene.status), lpv,
+	res <- data.frame(gene_status = unname(gene.status), pv,
 		row.names = gene.names, check.names = FALSE, stringsAsFactors = FALSE)
 
-	return(list(expr = X, design = design, lpv = lpv,
+	return(list(expr = X, design = design, pv = pv,
 		gene_status = gene.status, sample_status = sample.status, res = res))
 }

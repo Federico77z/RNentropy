@@ -14,12 +14,12 @@ transcript identifiers are used as row names.
   A data frame with 81314 observations on the following 7 variables.
   \describe{
     \item{\code{GENE_ID}}{a character vector containing gene identifiers}
-    \item{\code{brain_s7_1}}{a numeric vector}
-    \item{\code{heart_s7_1}}{a numeric vector}
-    \item{\code{kidney_s7_1}}{a numeric vector}
-    \item{\code{liver_s7_1}}{a numeric vector}
-    \item{\code{lung_s7_1}}{a numeric vector}
-    \item{\code{muscle_s7_1}}{a numeric vector}
+    \item{\code{brain}}{a numeric vector}
+    \item{\code{heart}}{a numeric vector}
+    \item{\code{kidney}}{a numeric vector}
+    \item{\code{liver}}{a numeric vector}
+    \item{\code{lung}}{a numeric vector}
+    \item{\code{muscle}}{a numeric vector}
   }
 }
 \source{
