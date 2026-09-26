@@ -30,8 +30,7 @@ test_that("complete S7 package data retain the historical input structure", {
   expect_s3_class(RN_IsoSwitch_Example_S7, "data.frame")
   expect_identical(dim(RN_IsoSwitch_Example_S7), c(81314L, 7L))
   expect_identical(names(RN_IsoSwitch_Example_S7),
-    c("GENE_ID", "brain_s7_1", "heart_s7_1", "kidney_s7_1",
-      "liver_s7_1", "lung_s7_1", "muscle_s7_1"))
+    c("GENE_ID", "brain", "heart", "kidney", "liver", "lung", "muscle"))
   expect_identical(length(unique(RN_IsoSwitch_Example_S7$GENE_ID)), 28426L)
   expect_identical(anyDuplicated(row.names(RN_IsoSwitch_Example_S7)), 0L)
   expect_false(any(is.na(RN_IsoSwitch_Example_S7)))

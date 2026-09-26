@@ -1,9 +1,19 @@
+# RNentropy 1.3.2
+
+- `RN_iso_select` now combines the sample p-values of each TESTED gene into a
+  gene-level p-value with the Simes method and compares it with the threshold,
+  without correction across genes. The threshold argument `lpv_t` is renamed
+  `gpv_t`, the `method` argument and the `lpv_adj` component are removed, and
+  `selected` reports the gene-level p-value (`ISO_GPV`) next to the uncorrected
+  per-sample scores.
+- Renamed the sample columns of `RN_IsoSwitch_Example_S7` and of the compact S7
+  example file to plain tissue names (`brain`, `heart`, `kidney`, `liver`,
+  `lung`, `muscle`).
+
 # RNentropy 1.3.1
 
-- Added `RN_iso_select` to select genes with significant isoform switching. The
-  sample p-values of each gene are combined into a gene-level p-value with the
-  Simes method, which is compared with the threshold; the uncorrected
-  per-sample scores are reported next to the gene-level value.
+- Added `RN_iso_select` to apply multiple-testing correction to isoform-switch
+  local p-values and retain genes significant in at least one sample.
 - Added runnable file-based examples for the standard and isoform-switch
   workflows using a shared synthetic regression dataset.
 
