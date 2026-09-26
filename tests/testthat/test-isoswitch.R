@@ -9,7 +9,7 @@ test_that("iso-switch results reproduce the compact C++ S7 benchmark", {
 
   expect_identical(unname(results$gene_status), expected$STATUS)
   expect_identical(names(results$gene_status), expected$GENE_ID)
-  expect_identical(dim(results$lpv), c(4L, 6L))
+  expect_identical(dim(results$pv), c(4L, 6L))
 
   for(gene in expected$GENE_ID[expected$STATUS == "TESTED"])
   {
@@ -19,7 +19,7 @@ test_that("iso-switch results reproduce the compact C++ S7 benchmark", {
 
     expect_identical(unname(results$sample_status[gene, current.zero]),
       rep("NO_CURRENT_EXPRESSION", sum(current.zero)))
-    expect_equal(unname(results$lpv[gene, numeric.values]), as.numeric(cpp[numeric.values]),
+    expect_equal(unname(results$pv[gene, numeric.values]), as.numeric(cpp[numeric.values]),
       tolerance = 5e-5)
   }
 })
@@ -67,7 +67,7 @@ test_that("replicates are excluded together and zero states are distinguished", 
   expect_identical(unname(results$sample_status["gene", ]),
     c("NO_REFERENCE_EXPRESSION", "NO_REFERENCE_EXPRESSION",
       "NO_CURRENT_EXPRESSION", "NO_CURRENT_EXPRESSION"))
-  expect_true(all(is.na(results$lpv["gene", ])))
+  expect_true(all(is.na(results$pv["gene", ])))
 })
 
 test_that("large statistics are capped at 300", {
@@ -76,7 +76,7 @@ test_that("large statistics are capped at 300", {
 
   results <- RN_iso_calc(input, "gene")
 
-  expect_identical(unname(results$lpv["gene", ]), c(300, 300))
+  expect_identical(unname(results$pv["gene", ]), c(300, 300))
 })
 
 test_that("file wrapper accepts names and original numeric column positions", {
@@ -85,7 +85,7 @@ test_that("file wrapper accepts names and original numeric column positions", {
   named <- RNentropy_iso_switch(fixture, tr.col = "TR_ID", gene.col = "GENE_ID")
   numbered <- RNentropy_iso_switch(fixture, tr.col = 1, gene.col = 2)
 
-  expect_equal(named$lpv, numbered$lpv)
+  expect_equal(named$pv, numbered$pv)
   expect_identical(named$gene_status, numbered$gene_status)
 })
 
@@ -123,7 +123,7 @@ test_that("isoform rows do not need to be consecutive", {
     direct.grouped$gene_status)
   expect_identical(direct.interleaved$sample_status,
     direct.grouped$sample_status)
-  expect_equal(direct.interleaved$lpv, direct.grouped$lpv)
+  expect_equal(direct.interleaved$pv, direct.grouped$pv)
 
   paths <- tempfile(fileext = c(".interleaved.tsv", ".grouped.tsv"))
   on.exit(unlink(paths))
@@ -139,7 +139,7 @@ test_that("isoform rows do not need to be consecutive", {
 
   expect_identical(file.interleaved$gene_status, file.grouped$gene_status)
   expect_identical(file.interleaved$sample_status, file.grouped$sample_status)
-  expect_equal(file.interleaved$lpv, file.grouped$lpv)
+  expect_equal(file.interleaved$pv, file.grouped$pv)
 })
 
 test_that("invalid iso-switch inputs are rejected", {

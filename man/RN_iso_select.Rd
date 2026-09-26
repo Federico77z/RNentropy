@@ -9,13 +9,13 @@ and select genes with a gene-level p-value lower than or equal to a
 user-defined threshold.
 }
 \usage{
-RN_iso_select(Results, gpv_t = 0.01)
+RN_iso_select(Results, gene_pv = 0.01)
 }
 \arguments{
   \item{Results}{
 The output of \code{RN_iso_calc} or \code{RNentropy_iso_switch}.
 }
-  \item{gpv_t}{
+  \item{gene_pv}{
 Threshold for gene-level p-values, expressed as a raw p-value between 0 and 1
 (Default: 0.01).
 }
@@ -30,24 +30,24 @@ that relative isoform usage does not change in any sample, accounting for the
 multiple sample tests of the gene, and it is valid under independence and under
 the positive dependence expected between samples of the same gene.
 
-Gene-level p-values are compared directly with \code{gpv_t}; no correction is
+Gene-level p-values are compared directly with \code{gene_pv}; no correction is
 applied across genes. Genes that were not tested, and TESTED genes without any
 finite sample p-value, receive no gene-level p-value and are never selected.
-Sample p-values are not corrected: the original isoform-switch LPVs are
+Sample p-values are not corrected: the original isoform-switch p-values are
 reported next to the gene-level value to show in which samples the change
 occurs.
 }
 
 \value{
 The original input list containing two additional components:
-\item{gpv}{A named vector containing, for each gene, the Simes gene-level
+\item{gene_pv}{A named vector containing, for each gene, the Simes gene-level
 p-value as \code{-log10(p-value)}. Genes without a gene-level p-value are
 reported as \code{NA}.}
 \item{selected}{A data.frame containing TESTED genes with a gene-level p-value
-less than or equal to \code{gpv_t}. Gene identifiers are stored as row names.
-The data.frame contains gene status, the gene-level p-value (\code{ISO_GPV}),
-and the original isoform-switch LPVs (\code{ISO_LPV_<sample>}), all as
-\code{-log10(p-value)}. Rows are ordered by decreasing \code{ISO_GPV}.}
+less than or equal to \code{gene_pv}. Gene identifiers are stored as row names.
+The data.frame contains gene status, the gene-level p-value (\code{ISO_GENE_PV}),
+and the original isoform-switch p-values (\code{ISO_PV_<sample>}), all as
+\code{-log10(p-value)}. Rows are ordered by decreasing \code{ISO_GENE_PV}.}
 }
 
 \references{
@@ -69,7 +69,7 @@ Isoforms <- data.frame(
 )
 Results <- RN_iso_calc(Isoforms, gene.col = "gene")
 Results <- RN_iso_select(Results)
-Results$gpv
+Results$gene_pv
 Results$selected
 }
 \keyword{ RNentropy }

@@ -111,18 +111,18 @@ S7_Results <- RN_iso_calc(
 S7_Results <- RN_iso_select(S7_Results)
 S7_Results$gene_status
 S7_Results$sample_status
-S7_Results$lpv
-S7_Results$gpv
+S7_Results$pv
+S7_Results$gene_pv
 S7_Results$selected
 ```
 
 `RN_iso_select()` combines the finite sample p-values of each gene with
 status `TESTED` into one gene-level p-value with the Simes method, and
 retains genes whose gene-level p-value is at or below the threshold; no
-correction is applied across genes. Its `gpv_t` argument is expressed as
-a raw p-value and defaults to 0.01. The selected table reports the
-gene-level p-value (`ISO_GPV`) and the uncorrected per-sample
-isoform-switch scores (`ISO_LPV_<sample>`), which show in which samples
+correction is applied across genes. Its `gene_pv` argument is expressed
+as a raw p-value and defaults to 0.01. The selected table reports the
+gene-level p-value (`ISO_GENE_PV`) and the uncorrected per-sample
+isoform-switch scores (`ISO_PV_<sample>`), which show in which samples
 the change occurs.
 
 ### Starting from a transcript expression file

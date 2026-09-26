@@ -43,8 +43,9 @@ Positive pseudocount added to the isoform frequencies before re-normalization
 A list containing:
 \item{expr}{The original expression data.frame.}
 \item{design}{The experimental design matrix.}
-\item{lpv}{A gene by sample matrix containing -log10(p-values). Values that
-cannot be calculated are reported as \code{NA}.}
+\item{pv}{A gene by sample matrix containing -log10(p-values), with columns
+named \code{ISO_PV_<sample>}. Values that cannot be calculated are reported as
+\code{NA}.}
 \item{gene_status}{A named vector reporting \code{TESTED},
 \code{NOTEST(ISO)}, or \code{NOTEST(EXP)} for each gene.}
 \item{sample_status}{A gene by sample matrix reporting \code{TESTED},
@@ -67,7 +68,7 @@ Isoforms <- data.frame(
 )
 Results <- RN_iso_calc(Isoforms, gene.col = "gene")
 Results$gene_status
-Results$lpv
+Results$pv
 }
 \keyword{ RNentropy }
 \keyword{ Run }
