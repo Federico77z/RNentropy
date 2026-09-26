@@ -51,7 +51,6 @@ named \code{ISO_PV_<sample>}. Values that cannot be calculated are reported as
 \item{sample_status}{A gene by sample matrix reporting \code{TESTED},
 \code{NO_CURRENT_EXPRESSION}, or \code{NO_REFERENCE_EXPRESSION}. The last two
 values correspond to '-' and '*' in the C++ implementation, respectively.}
-\item{res}{A data.frame containing gene status and local p-values.}
 }
 
 \author{

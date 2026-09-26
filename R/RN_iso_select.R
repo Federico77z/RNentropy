@@ -1,5 +1,5 @@
 RN_iso_select <-
-function(Results, gene_pv = 0.01)
+function(Results, gene_pv = 0.05)
 {
 	if(!is.list(Results) || !all(c("pv", "gene_status") %in% names(Results)))
 	{

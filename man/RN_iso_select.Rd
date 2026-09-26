@@ -9,7 +9,7 @@ and select genes with a gene-level p-value lower than or equal to a
 user-defined threshold.
 }
 \usage{
-RN_iso_select(Results, gene_pv = 0.01)
+RN_iso_select(Results, gene_pv = 0.05)
 }
 \arguments{
   \item{Results}{
@@ -17,7 +17,7 @@ The output of \code{RN_iso_calc} or \code{RNentropy_iso_switch}.
 }
   \item{gene_pv}{
 Threshold for gene-level p-values, expressed as a raw p-value between 0 and 1
-(Default: 0.01).
+(Default: 0.05).
 }
 }
 

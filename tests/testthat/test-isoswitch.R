@@ -7,6 +7,8 @@ test_that("iso-switch results reproduce the compact C++ S7 benchmark", {
 
   results <- RN_iso_calc(input, gene.col = "GENE_ID")
 
+  expect_identical(names(results),
+    c("expr", "design", "pv", "gene_status", "sample_status"))
   expect_identical(unname(results$gene_status), expected$STATUS)
   expect_identical(names(results$gene_status), expected$GENE_ID)
   expect_identical(dim(results$pv), c(4L, 6L))

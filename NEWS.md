@@ -1,3 +1,10 @@
+# RNentropy 1.3.3
+
+- `RN_iso_calc` and `RNentropy_iso_switch` no longer return `res`, which
+  duplicated `gene_status` and `pv`.
+- The default gene-level threshold of `RN_iso_select` (`gene_pv`) is now 0.05
+  (previously 0.01).
+
 # RNentropy 1.3.2
 
 - `RN_iso_select` now combines the sample p-values of each TESTED gene into a
