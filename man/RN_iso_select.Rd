@@ -36,10 +36,6 @@ finite sample p-value, receive no gene-level p-value and are never selected.
 Sample p-values are not corrected: the original isoform-switch LPVs are
 reported next to the gene-level value to show in which samples the change
 occurs.
-
-This selection step is specific to the R package. The historical C++
-isoform-switch implementation produces unfiltered results and has no
-corresponding selector.
 }
 
 \value{

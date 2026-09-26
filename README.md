@@ -123,8 +123,7 @@ correction is applied across genes. Its `gpv_t` argument is expressed as
 a raw p-value and defaults to 0.01. The selected table reports the
 gene-level p-value (`ISO_GPV`) and the uncorrected per-sample
 isoform-switch scores (`ISO_LPV_<sample>`), which show in which samples
-the change occurs. This selection step is specific to the R package and
-has no counterpart in the historical C++ isoform-switch executable.
+the change occurs.
 
 ### Starting from a transcript expression file
 
