@@ -10,7 +10,7 @@ RN_calc_LPV
 This function calculates local p-values from expression data, output as -log10(p-value).
 }
 \usage{
-RN_calc_LPV(X, design, bind = TRUE)
+RN_calc_LPV(X, design = NULL, bind = TRUE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -47,33 +47,6 @@ Federico Zambelli - Dep. of Biosciences, University of Milan
 \examples{
 data("RN_Brain_Example_tpm", "RN_Brain_Example_design")
 LPV <- RN_calc_LPV(RN_Brain_Example_tpm, RN_Brain_Example_design)
-## The function is currently defined as
-
-function(X, design = NULL, bind = TRUE)
-{
-  if(is.null(design))
-  {
-    design <- .RN_default_design(sum(sapply(X, is.numeric)))
-  }
-  
-	rnums <- sapply(X, is.numeric)
-
-	.RN_design_check(X, design, rnums)
-	RL <- .RN_get_replicate_list(design)
-	
-	l1 <- rep("LOC_LPV", length(X[rnums]))
-	l2 <- colnames(X[rnums])
-	PV <- apply(X[rnums],  1, '.RN_calc_LPV_row', RL = RL)
-	PV <- t(PV)
-	colnames(PV) <- paste(l1, l2, sep="_")
-
-	if(bind)
-	{
-		return (cbind(X, PV))
-	}
-	else
-		return (PV)
-}
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

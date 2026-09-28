@@ -61,6 +61,10 @@ Giulio Pavesi - Dep. of Biosciences, University of Milan
 Federico Zambelli - Dep. of Biosciences, University of Milan
 }
 
+\seealso{
+\code{\link{RN_iso_calc}}, \code{\link{RNentropy_iso_switch}}
+}
+
 \examples{
 Isoforms <- data.frame(
   gene = c("gene_1", "gene_1", "gene_2", "gene_2"),

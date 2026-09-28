@@ -7,17 +7,17 @@ RN_BarresLab_design
 }
 \description{
 %%  ~~ A concise (1-5 lines) description of the dataset. ~~
-The experiment design matrix for RN_BarresLab_design
+The experiment design matrix for RN_BarresLab_FPKM.
 }
-\usage{data("RN_Brain_Example_design")}
+\usage{data("RN_BarresLab_design")}
 \format{
-	The format is: num[1:9,1:3]
+	The format is: int [1:7, 1:7]
 }
 \details{
 %%  ~~ If necessary, more details than the __description__ above ~~
 A binary matrix where conditions correspond to columns and samples to rows. In this example there are seven conditions (cell types) and seven samples with the expression measured by mean FPKM.
 }
 \examples{
-data(RN_Brain_Example_design)
+data(RN_BarresLab_design)
 }
 \keyword{datasets}

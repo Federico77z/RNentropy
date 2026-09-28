@@ -10,7 +10,7 @@ RN_calc
 Computes both global and local p-values, and returns the results in a list containing for each gene the original expression values and the associated global and local p-values (as  -log10(p-value)).
 }
 \usage{
-RN_calc(X, design)
+RN_calc(X, design = NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -20,7 +20,7 @@ data.frame with expression values. It may contain additional non numeric columns
 }
   \item{design}{
 %%     ~~Describe \code{design} here~~
-The RxC design matrix where R (rows) corresponds to the number of numeric columns (samples) in 'file' and C (columns) to the number of conditions. It must be a binary matrix with one and only one '1' for every row, corresponding to the condition (column) for which the sample corresponding to the row has to be considered a biological ot technical replicate. See the example 'RN_Brain_Example_design' for the design matrix of 'RN_Brain_Example_tpm' which has three replicates for three conditions (three rows) for a total of nine samples (nine rows). design defaults to a square matrix of independent samples (diagonal = 1, everything else = 0)
+The RxC design matrix where R (rows) corresponds to the number of numeric columns (samples) in 'X' and C (columns) to the number of conditions. It must be a binary matrix with one and only one '1' for every row, corresponding to the condition (column) for which the sample corresponding to the row has to be considered a biological or technical replicate. See the example 'RN_Brain_Example_design' for the design matrix of 'RN_Brain_Example_tpm' which has three replicates for three conditions (three rows) for a total of nine samples (nine rows). design defaults to a square matrix of independent samples (diagonal = 1, everything else = 0)
 }
 }
 
@@ -51,30 +51,6 @@ data("RN_Brain_Example_tpm", "RN_Brain_Example_design")
 #compute statistics and p-values (considering only a subset of genes due to
 #examples running time limit of CRAN)
 Results <- RN_calc(RN_Brain_Example_tpm[1:10000,], RN_Brain_Example_design)
-
-## The function is currently defined as
-
-function(X, design = NULL)
-{
-  if(is.null(design))
-  {
-    design <- .RN_default_design(sum(sapply(X, is.numeric)))
-  }
-  
-	Results <- list(expr = X, design = design)
-
-	GPV <- RN_calc_GPV(X, bind = FALSE)
-	LPV <- RN_calc_LPV(X, design = design, bind = FALSE)	
-
-	TABLE = cbind(X,'---',GPV,'---',LPV)	
-
-	Results$gpv <- GPV
-	Results$lpv <- LPV
-	Results$c_like <- TABLE
-	Results$res <- cbind(X, GPV, LPV)
-	
-	return(Results)
-}
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

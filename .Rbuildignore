@@ -5,7 +5,7 @@ RNentropy.Rproj
 .Rhistory
 .gitignore
 LICENSE.txt
-cran-comments.md
+^cran-comments\.md$
 ^README\.Rmd$
 ^CRAN-SUBMISSION$
 ^\.github$

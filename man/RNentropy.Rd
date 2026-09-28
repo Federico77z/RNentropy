@@ -8,7 +8,7 @@ RNentropy
 This function runs RNentropy on a file containing normalized expression values.
 }
 \usage{
-RNentropy(file, tr.col, design, header = TRUE, skip = 0, skip.col = NULL, 
+RNentropy(file, tr.col, design = NULL, header = TRUE, skip = 0, skip.col = NULL, 
 col.names = NULL)
 }
 %- maybe also 'usage' for other objects documented here.
@@ -23,11 +23,11 @@ The column # (1 based) in the file containing the univocal identifiers (usually 
 }
   \item{design}{
 %%     ~~Describe \code{design} here~~
-The RxC design matrix where R (rows) corresponds to the number of numeric columns (samples) in 'file' and C (columns) to the number of conditions. It must be a binary matrix with one and only one '1' for every row, corresponding to the condition (column) for which the sample corresponding to the row has to be considered a biological ot technical replicate. See the example 'RN_Brain_Example_design' for the design matrix of 'RN_Brain_Example_tpm' which has three replicates for three conditions (three rows) for a total of nine samples (nine rows).
+The RxC design matrix where R (rows) corresponds to the number of numeric columns (samples) in 'file' and C (columns) to the number of conditions. It must be a binary matrix with one and only one '1' for every row, corresponding to the condition (column) for which the sample corresponding to the row has to be considered a biological or technical replicate. See the example 'RN_Brain_Example_design' for the design matrix of 'RN_Brain_Example_tpm' which has three replicates for three conditions (three rows) for a total of nine samples (nine rows). design defaults to a square matrix of independent samples (diagonal = 1, everything else = 0).
 }
   \item{header}{
 %%     ~~Describe \code{header} here~~
-Set this to FALSE if 'file' does not have an header row. If header is TRUE the read.table function used by RNentropy will try to assign names to each column using the header. Default = TRUE
+Set this to FALSE if 'file' does not have a header row. If header is TRUE the read.table function used by RNentropy will try to assign names to each column using the header. Default = TRUE
 }
   \item{skip}{
 %%     ~~Describe \code{skip} here~~
@@ -35,7 +35,7 @@ Number of rows to skip at the beginning of 'file'. Rows beginning with a '#' tok
 }
   \item{skip.col}{
 %%     ~~Describe \code{skip.col} here~~
-Columns that will not be imported from 'file' (1 based) and not included in the subsequent analysis. Useful if you have more than annotation column, e.g. gene name in the first, transcript ID in the second columns.
+Columns that will not be imported from 'file' (1 based) and not included in the subsequent analysis. Useful if you have more than one annotation column, e.g. gene name in the first, transcript ID in the second columns.
 }
   \item{col.names}{
 %%     ~~Describe \code{col.names} here~~
@@ -61,30 +61,29 @@ Federico Zambelli - Dep. of Biosciences, University of Milan
 
 
 \examples{
-#load expression values and experiment design
-data("RN_Brain_Example_tpm", "RN_Brain_Example_design")
-#compute statistics and p-values (considering only a subset of genes due to
-#examples running time limit of CRAN) 
-Results <- RN_calc(RN_Brain_Example_tpm[1:10000,], RN_Brain_Example_design)
+#synthetic example file: transcript IDs, gene IDs and comments in the first
+#three columns, then two replicates for each of three conditions
+Example_file <- system.file("extdata", "RNentropy_example.tsv",
+  package = "RNentropy")
+Sample_names <- c("A_1", "A_2", "B_1", "B_2", "C_1", "C_2")
+Example_design <- matrix(
+  c(1, 0, 0,
+    1, 0, 0,
+    0, 1, 0,
+    0, 1, 0,
+    0, 0, 1,
+    0, 0, 1),
+  nrow = 6, byrow = TRUE,
+  dimnames = list(Sample_names, c("A", "B", "C"))
+)
+#compute statistics and p-values
+Results <- RNentropy(Example_file, tr.col = 1, design = Example_design,
+  header = FALSE, skip.col = c(2, 3), col.names = Sample_names)
 #select only genes with significant changes of expression
 Results <- RN_select(Results)
-
-
-## The function is currently defined as
-function (file, tr.col, design, header = TRUE, skip = 0, skip.col = NULL, 
-    col.names = NULL) 
-{
-    TABLE <- read.table(file, row.names = tr.col, header = header, 
-        skip = skip, blank.lines.skip = TRUE, comment.char = "#")
-    if (!is.null(skip.col)) {
-        TABLE <- .RN_delete_col(TABLE, tr.col, skip.col)
-    }
-    if (!is.null(col.names)) {
-        colnames(TABLE) <- col.names
-    }
-    return(RN_calc(TABLE, design))
-  }
+Results$selected
 }
+
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{ RNentropy }% use one of  RShowDoc("KEYWORDS")

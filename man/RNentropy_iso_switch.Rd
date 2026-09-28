@@ -29,7 +29,7 @@ identifiers.
 The design matrix. Refer to the help for RN_iso_calc for further info.
 }
   \item{header}{
-Set this to FALSE if \code{file} does not have an header row. If header is TRUE
+Set this to FALSE if \code{file} does not have a header row. If header is TRUE
 the read.table function used by RNentropy will try to assign names to each
 column using the header (Default = TRUE).
 }
@@ -47,8 +47,8 @@ the columns effectively imported (thus, no name for the skipped ones). Also,
 tr.col is not considered an imported column.
 }
   \item{min_expr}{
-Minimum expression value used to determine whether a gene can be tested
-(Default = 1).
+Expression threshold used to determine whether a gene can be tested. Refer to
+the help for RN_iso_calc for the exact rule (Default = 1).
 }
   \item{pseudocount}{
 Positive pseudocount added to the isoform frequencies before re-normalization
@@ -64,6 +64,10 @@ Refer to the help for RN_iso_calc.
 Giulio Pavesi - Dep. of Biosciences, University of Milan
 
 Federico Zambelli - Dep. of Biosciences, University of Milan
+}
+
+\seealso{
+\code{\link{RN_iso_calc}}, \code{\link{RN_iso_select}}
 }
 
 \examples{
