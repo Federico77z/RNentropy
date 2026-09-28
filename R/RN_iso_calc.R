@@ -104,9 +104,6 @@ function(X, gene.col, design = NULL, min_expr = 1, pseudocount = 0.01)
 		}
 	}
 
-	res <- data.frame(gene_status = unname(gene.status), pv,
-		row.names = gene.names, check.names = FALSE, stringsAsFactors = FALSE)
-
 	return(list(expr = X, design = design, pv = pv,
-		gene_status = gene.status, sample_status = sample.status, res = res))
+		gene_status = gene.status, sample_status = sample.status))
 }

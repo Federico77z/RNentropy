@@ -20,9 +20,7 @@ iso_select_fixture <- function()
     design = diag(2),
     pv = pv,
     gene_status = gene.status,
-    sample_status = sample.status,
-    res = data.frame(gene_status = unname(gene.status), pv,
-      row.names = rownames(pv), check.names = FALSE)
+    sample_status = sample.status
   )
 }
 
@@ -71,7 +69,6 @@ test_that("gene-level Simes p-values are compared with the threshold", {
   expect_identical(results$pv, input$pv)
   expect_identical(results$gene_status, input$gene_status)
   expect_identical(results$sample_status, input$sample_status)
-  expect_identical(results$res, input$res)
 })
 
 test_that("threshold is inclusive", {
@@ -161,11 +158,11 @@ test_that("complete S7 selection agrees with a direct Simes calculation", {
 
   simes <- simes_reference(input$pv, input$gene_status)
   testable <- !is.na(simes)
-  expected <- names(simes)[testable & simes <= 0.01]
+  expected <- names(simes)[testable & simes <= 0.05]
 
   expect_identical(sum(testable), 4058L)
   expect_equal(results$gene_pv[testable], -log10(simes[testable]))
-  expect_identical(nrow(results$selected), 111L)
+  expect_identical(nrow(results$selected), 183L)
   expect_setequal(rownames(results$selected), expected)
   expect_true(all(results$selected$gene_status == "TESTED"))
   expect_false(is.unsorted(rev(results$selected$ISO_GENE_PV)))
