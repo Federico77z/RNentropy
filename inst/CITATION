@@ -1,15 +1,28 @@
-year <- 2018
-note <- sprintf("R package version %s", meta$Version)
+citHeader("To cite RNentropy in publications use:")
 
-bibentry(bibtype = "Manual",
-         title = "{RNentropy}: an entropy-based tool for the   detection of significant variation of gene expression across multiple RNA-Seq  experiments",
+bibentry(bibtype = "Article",
+         title = "{RNentropy}: an entropy-based tool for the detection of significant variation of gene expression across multiple {RNA-Seq} experiments",
          author = c(person("Federico", "Zambelli"),
                     person("Francesca", "Mastropasqua"),
                     person("Ernesto", "Picardi"),
-                    person("Anna Maria", "D'erchia"),
+                    person(c("Anna", "Maria"), "D'Erchia"),
                     person("Graziano", "Pesole"),
                     person("Giulio", "Pavesi")),
+         journal = "Nucleic Acids Research",
          year = 2018,
-         url = "https://doi.org/10.1093/nar/gky055",
-         doi = "10.1093/nar/gky055",
-         journal = "Nucleic Acids Research")
+         volume = 46,
+         number = 8,
+         pages = "e46",
+         doi = "10.1093/nar/gky055")
+
+bibentry(bibtype = "InCollection",
+         title = "Using {RNentropy} to Detect Significant Variation in Gene Expression Across Multiple {RNA-Seq} or Single-Cell {RNA-Seq} Samples",
+         author = c(person("Federico", "Zambelli"),
+                    person("Giulio", "Pavesi")),
+         booktitle = "{RNA} Bioinformatics",
+         series = "Methods in Molecular Biology",
+         volume = 2284,
+         pages = "77--96",
+         publisher = "Springer US",
+         year = 2021,
+         doi = "10.1007/978-1-0716-1307-8_6")

@@ -10,7 +10,7 @@ authors:
     given-names: Giulio
     orcid: "https://orcid.org/0000-0001-5705-6249"
 version: 1.3.3
-date-released: 2026-09-26
+date-released: 2026-09-28
 license: GPL-3.0-only
 repository-code: "https://github.com/Federico77z/RNentropy"
 preferred-citation:
@@ -23,7 +23,7 @@ preferred-citation:
       given-names: Francesca
     - family-names: Picardi
       given-names: Ernesto
-    - family-names: D'erchia
+    - family-names: D'Erchia
       given-names: Anna Maria
     - family-names: Pesole
       given-names: Graziano
@@ -31,4 +31,24 @@ preferred-citation:
       given-names: Giulio
   journal: Nucleic Acids Research
   year: 2018
+  volume: 46
+  issue: 8
+  start: e46
   doi: 10.1093/nar/gky055
+references:
+  - type: generic
+    title: "Using RNentropy to Detect Significant Variation in Gene Expression Across Multiple RNA-Seq or Single-Cell RNA-Seq Samples"
+    authors:
+      - family-names: Zambelli
+        given-names: Federico
+      - family-names: Pavesi
+        given-names: Giulio
+    collection-title: RNA Bioinformatics
+    collection-type: book
+    publisher:
+      name: Springer US
+    volume: 2284
+    start: 77
+    end: 96
+    year: 2021
+    doi: 10.1007/978-1-0716-1307-8_6

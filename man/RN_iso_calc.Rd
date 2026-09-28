@@ -4,9 +4,11 @@
 RN_iso_calc
 }
 \description{
-This function calculates local p-values for changes in relative isoform usage,
-output as -log10(p-value). At least two isoforms and two samples with expression
-strictly greater than \code{min_expr} are required for a gene to be tested.
+This function calculates, for each gene and each sample, a p-value for changes
+in relative isoform usage, output as -log10(p-value). A gene is tested only if
+at least two of its isoforms have an expression value strictly greater than
+\code{min_expr} in at least one sample, and at least two samples have at least
+one isoform with an expression value strictly greater than \code{min_expr}.
 }
 \usage{
 RN_iso_calc(X, gene.col, design = NULL, min_expr = 1,
@@ -30,8 +32,13 @@ defaults to a square matrix of independent samples (diagonal = 1, everything
 else = 0).
 }
   \item{min_expr}{
-Minimum expression value used to determine whether a gene can be tested.
-Expression must be strictly greater than this value (Default = 1).
+Expression threshold used to determine whether a gene can be tested (see
+Description). The two isoforms and the two samples above the threshold do not
+need to coincide: for example, one isoform expressed only in one sample and
+another isoform expressed only in a different sample is sufficient. The
+threshold only determines whether a gene is tested; all expression values of a
+tested gene, including those below the threshold, are used in the test
+(Default = 1).
 }
   \item{pseudocount}{
 Positive pseudocount added to the isoform frequencies before re-normalization
@@ -57,6 +64,10 @@ values correspond to '-' and '*' in the C++ implementation, respectively.}
 Giulio Pavesi - Dep. of Biosciences, University of Milan
 
 Federico Zambelli - Dep. of Biosciences, University of Milan
+}
+
+\seealso{
+\code{\link{RNentropy_iso_switch}}, \code{\link{RN_iso_select}}, \code{\link{RN_IsoSwitch_Example_S7}}
 }
 
 \examples{

@@ -27,6 +27,10 @@ Historical S7 benchmark preserved with the independent C++ implementation of
 RNentropy at
 \url{https://github.com/Federico77z/RNentropy_cpp}.
 }
+\seealso{
+\code{\link{RN_iso_calc}}, \code{\link{RN_iso_select}}
+}
+
 \examples{
 data(RN_IsoSwitch_Example_S7)
 }

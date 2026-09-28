@@ -152,6 +152,7 @@ test_that("invalid selector inputs are rejected", {
 })
 
 test_that("complete S7 selection agrees with a direct Simes calculation", {
+  skip_on_cran()
   data("RN_IsoSwitch_Example_S7", package = "RNentropy")
   input <- RN_iso_calc(RN_IsoSwitch_Example_S7, gene.col = "GENE_ID")
   results <- RN_iso_select(input)

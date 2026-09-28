@@ -4,6 +4,12 @@
   duplicated `gene_status` and `pv`.
 - The default gene-level threshold of `RN_iso_select` (`gene_pv`) is now 0.05
   (previously 0.01).
+- Corrected the package citation, which now lists the 2018 Nucleic Acids
+  Research article and the 2021 Methods in Molecular Biology chapter.
+- Corrected and completed several help pages: an overview of both analyses in
+  the package help, the exact testability rule of `min_expr`, cross-references
+  between the isoform-switch functions, fixes to the dataset descriptions, and
+  removal of outdated copies of the source code from the examples.
 
 # RNentropy 1.3.2
 

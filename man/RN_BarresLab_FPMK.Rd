@@ -7,7 +7,7 @@ RN_BarresLab_FPKM
 }
 \description{
 %%  ~~ A concise (1-5 lines) description of the dataset. ~~
-Data expression values (mean FPKM) for different cerebral cortex cell from Zhang et al: "An RNA-Seq transcriptome and splicing database of glia, neurons, and vascular cells of the cerebral cortex", J Neurosci 2014 Sep. 
+Data expression values (mean FPKM) for different cerebral cortex cell types from Zhang et al: "An RNA-sequencing transcriptome and splicing database of glia, neurons, and vascular cells of the cerebral cortex", J Neurosci 2014 Sep. 
 RN_BarresLab_design is the corresponding design matrix.
 }
 \usage{data("RN_BarresLab_FPKM")}
@@ -17,7 +17,7 @@ RN_BarresLab_design is the corresponding design matrix.
     \item{\code{Astrocyte}}{a numeric vector}
     \item{\code{Neuron}}{a numeric vector}
     \item{\code{OPC}}{a numeric vector}
-    \item{\code{NFO }}{a numeric vector}
+    \item{\code{NFO}}{a numeric vector}
     \item{\code{MO}}{a numeric vector}
     \item{\code{Microglia}}{a numeric vector}
     \item{\code{Endothelial}}{a numeric vector}

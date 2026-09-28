@@ -12,9 +12,9 @@ RN_Brain_Example_design is the corresponding design matrix.
 }
 \usage{data("RN_Brain_Example_tpm")}
 \format{
-  A data frame with 78699 observations on the following 9 variables.
+  A data frame with 78699 observations on the following 10 variables.
   \describe{
-    \item{\code{GENE}}{a factor vector}
+    \item{\code{GENE}}{a factor containing gene identifiers}
     \item{\code{BRAIN_2_1}}{a numeric vector}
     \item{\code{BRAIN_2_2}}{a numeric vector}
     \item{\code{BRAIN_2_3}}{a numeric vector}
